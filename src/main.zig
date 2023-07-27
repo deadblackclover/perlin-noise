@@ -2,7 +2,7 @@ const std = @import("std");
 const math = std.math;
 
 const HEIGHT = 50;
-const WIDTH = 50;
+const WIDTH = 100;
 
 const symbols = [_]u8{ '.', ',', '-', '~', '*', ':', ';', '!', '=', '#', '$', '@' };
 
