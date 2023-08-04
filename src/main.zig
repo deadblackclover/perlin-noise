@@ -24,25 +24,25 @@ fn grad(hash: i64, x: f64, y: f64, z: f64) f64 {
 }
 
 fn noise(x: f64, y: f64, z: f64, p: [512]i64) f64 {
-    const X = @floatToInt(usize, math.floor(x));
-    const Y = @floatToInt(usize, math.floor(y));
-    const Z = @floatToInt(usize, math.floor(z));
+    const X = @as(usize, @intFromFloat(math.floor(x)));
+    const Y = @as(usize, @intFromFloat(math.floor(y)));
+    const Z = @as(usize, @intFromFloat(math.floor(z)));
 
-    const sx = x - @intToFloat(f64, X);
-    const sy = y - @intToFloat(f64, Y);
-    const sz = z - @intToFloat(f64, Z);
+    const sx = x - @as(f64, @floatFromInt(X));
+    const sy = y - @as(f64, @floatFromInt(Y));
+    const sz = z - @as(f64, @floatFromInt(Z));
 
     const u = fade(sx);
     const v = fade(sy);
     const w = fade(sz);
 
-    const A = @intCast(usize, p[X]) + Y;
-    const AA = @intCast(usize, p[A]) + Z;
-    const AB = @intCast(usize, p[A + 1]) + Z;
+    const A = @as(usize, @intCast(p[X])) + Y;
+    const AA = @as(usize, @intCast(p[A])) + Z;
+    const AB = @as(usize, @intCast(p[A + 1])) + Z;
 
-    const B = @intCast(usize, p[X + 1]) + Y;
-    const BA = @intCast(usize, p[B]) + Z;
-    const BB = @intCast(usize, p[B + 1]) + Z;
+    const B = @as(usize, @intCast(p[X + 1])) + Y;
+    const BA = @as(usize, @intCast(p[B])) + Z;
+    const BB = @as(usize, @intCast(p[B + 1])) + Z;
 
     return lerp(w, lerp(v, lerp(u, grad(p[AA], x, y, z), grad(p[BA], x - 1, y, z)), lerp(u, grad(p[AB], x, y - 1, z), grad(p[BB], x - 1, y - 1, z))), lerp(v, lerp(u, grad(p[AA + 1], x, y, z - 1), grad(p[BA + 1], x - 1, y, z - 1)), lerp(u, grad(p[AB + 1], x, y - 1, z - 1), grad(p[BB + 1], x - 1, y - 1, z - 1))));
 }
@@ -65,7 +65,7 @@ pub fn main() !void {
             var y: f64 = 0;
             while (y < WIDTH) : (y += 1) {
                 const result = noise(x, y, z, p);
-                const s = @floatToInt(usize, @mod(result, 12.0));
+                const s = @as(usize, @intFromFloat(@mod(result, 12.0)));
                 std.debug.print("{c}", .{symbols[s]});
             }
             std.debug.print("\n", .{});
